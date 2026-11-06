@@ -23,20 +23,22 @@ git add vendor && git commit -m "Update skills"
 
 ## What's in it
 
+Skills are grouped by function in [`skills/`](skills/). `.claude/skills/` is a flat list of links into those folders, because Claude Code only finds skills one level deep there. To add a skill, put it in a category folder and link it from `.claude/skills/`.
+
 | Function | Skills |
 |---|---|
-| Strategy | `marketing-plan` `marketing-ideas` `marketing-psychology` `product-marketing` `offers` `pricing` `launch` |
-| Research | `customer-research` `competitor-profiling` `review-audit` |
-| Paid media | `ads` `ad-creative` plus the `claude-ads` plugin |
-| Copy | `copywriting` `copy-editing` `direct-response-copy` `ad-copy` `landing-page-copy` `copychief` `compliance-checker` |
-| Conversion | `cro` `ab-testing` `popups` `lead-magnets` |
-| Email and SMS | `emails` `sms` |
-| SEO | `seo-audit` `ai-seo` `schema` `site-architecture` `programmatic-seo` `link-building` `directory-submissions` plus the `claude-seo` plugin |
-| Analytics | `analytics` `attribution` `conversion-tracking` and the [`google-data`](google-data/) connector |
-| Measurement | `meridian-*` `*causalpy*` `causal-detective` `running-placebo-analysis` `marketing-geo-experiments` and the [`measurement`](measurement/) environments |
-| Web build | `core-web-vitals` `vercel-react-best-practices` `web-design-guidelines` `frontend-design` `flags-sdk` `vercel-flags` `gsap-*` plus the `impeccable` plugin |
+| [Strategy](skills/strategy/) | `marketing-plan` `marketing-ideas` `marketing-psychology` `product-marketing` `offers` `pricing` `launch` |
+| [Research](skills/research/) | `customer-research` `competitor-profiling` `review-audit` |
+| [Paid media](skills/paid-media/) | `ads` `ad-creative` plus the `claude-ads` plugin |
+| [Copy](skills/copy/) | `copywriting` `copy-editing` `direct-response-copy` `ad-copy` `landing-page-copy` `copychief` `compliance-checker` |
+| [Conversion](skills/conversion/) | `cro` `ab-testing` `popups` `lead-magnets` |
+| [Email and SMS](skills/email-sms/) | `emails` `sms` |
+| [SEO](skills/seo/) | `seo-audit` `ai-seo` `schema` `site-architecture` `programmatic-seo` `link-building` `directory-submissions` plus the `claude-seo` plugin |
+| [Analytics](skills/analytics/) | `analytics` `attribution` `conversion-tracking` and the [`google-data`](google-data/) connector |
+| [Measurement](skills/measurement/) | `meridian-*` `*causalpy*` `causal-detective` `running-placebo-analysis` `marketing-geo-experiments` and the [`measurement`](measurement/) environments |
+| [Web build](skills/web-build/) | `core-web-vitals` `vercel-react-best-practices` `web-design-guidelines` `frontend-design` `flags-sdk` `vercel-flags` `gsap-*` plus the `impeccable` plugin |
 | Social | [`social-analyst`](social-analyst/) |
-| Video | [`build-reel`](build-reel/), the `descript` plugin, and `lotgen-*` |
+| [Video](skills/video/) | [`build-reel`](build-reel/), the `descript` plugin, and `lotgen-*` |
 
 The `lotgen-*` skills drive [LOTGEN](https://lotgen.ai), a hosted video service, and need a LOTGEN account. The app isn't part of this repo.
 

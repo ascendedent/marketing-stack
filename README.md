@@ -1,6 +1,6 @@
 # Marketing Stack
 
-One folder that gives Claude Code a full marketing team: strategy, paid media, copy, creative, video, CRO, email, SEO, analytics and measurement. Open it in Claude Code and the skills are available straight away.
+One folder that gives Claude Code, Codex or Grok a full marketing team: strategy, paid media, copy, creative, video, CRO, email, SEO, analytics and measurement. Open it in any of the three and the skills are available straight away.
 
 Third-party skills are git submodules linked to their original repos, not copies, so you get updates from the authors and they keep credit.
 
@@ -9,10 +9,56 @@ Third-party skills are git submodules linked to their original repos, not copies
 ```sh
 git clone --recurse-submodules --shallow-submodules https://github.com/ascendedent/marketing-stack.git
 cd marketing-stack
-claude
+claude   # or: codex, grok
 ```
 
-Claude Code offers to install the plugins listed in `.claude/settings.json` when you trust the folder. Skills in `.claude/skills/` are symlinks, so on Windows enable Developer Mode and set `git config --global core.symlinks true` before cloning.
+Trust the folder when asked. Grok skips project skills until you do. Skills are symlinks, so on Windows enable Developer Mode and set `git config --global core.symlinks true` before cloning.
+
+## Use it with your agent
+
+All three agents read the same skills, so there's nothing to convert or keep in sync.
+
+| Agent | Reads skills from | Plugins |
+|---|---|---|
+| Claude Code | `.claude/skills/` | Offered automatically from `.claude/settings.json` |
+| Codex | `.agents/skills/` | Install with the commands below |
+| Grok | `.agents/skills/` | Install with the commands below |
+
+The paid media, SEO and web design functions rely on plugins, and so does Descript. The LOTGEN plugin is what connects the `lotgen-*` skills to the service. Claude Code users don't need the commands below for the first four, only for LOTGEN:
+
+```sh
+/plugin marketplace add ascendedent/lotgen-skills
+/plugin install lotgen@lotgen
+```
+
+**Codex**
+
+```sh
+codex plugin marketplace add AgriciDaniel/claude-ads
+codex plugin marketplace add AgriciDaniel/claude-seo
+codex plugin marketplace add pbakaus/impeccable
+codex plugin marketplace add descriptinc/descript-mcp
+codex plugin marketplace add ascendedent/lotgen-skills
+codex plugin add claude-ads@ai-marketing-hub-claude-ads
+codex plugin add claude-seo@agricidaniel-claude-seo
+codex plugin add impeccable@impeccable
+codex plugin add descript@descript
+codex plugin add lotgen@lotgen
+```
+
+**Grok**
+
+```sh
+grok plugin install AgriciDaniel/claude-ads
+grok plugin install AgriciDaniel/claude-seo
+grok plugin install descriptinc/descript-mcp
+grok plugin marketplace add pbakaus/impeccable
+grok plugin install impeccable@impeccable
+grok plugin marketplace add ascendedent/lotgen-skills
+grok plugin install lotgen@lotgen-skills
+```
+
+`claude-ads` and `claude-seo` are built for Claude Code. They install on Codex and Grok, but their authors only verify Claude Code, and most `claude-seo` skills expect Claude's plugin paths, so some may need adjusting.
 
 ## Update
 
@@ -23,7 +69,7 @@ git add vendor && git commit -m "Update skills"
 
 ## What's in it
 
-Skills are grouped by function in [`skills/`](skills/). `.claude/skills/` is a flat list of links into those folders, because Claude Code only finds skills one level deep there. To add a skill, put it in a category folder and link it from `.claude/skills/`.
+Skills are grouped by function in [`skills/`](skills/). `.claude/skills/` is a flat list of links into those folders, because Claude Code only finds skills one level deep there, and `.agents/skills` links to that same list for Codex and Grok. To add a skill, put it in a category folder and link it from `.claude/skills/`.
 
 | Function | Skills |
 |---|---|

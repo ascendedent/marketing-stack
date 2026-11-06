@@ -1,0 +1,5 @@
+- Set up a new account with me
+- How did my posts do this month?
+- What's working on my account — and what should I stop doing?
+- Plan next week's posts from what's working
+- Break down this video (Gemini result attached)

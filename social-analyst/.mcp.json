@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "social-analyst": {
+      "command": "uv",
+      "args": ["run", "--quiet", "sma-mcp"]
+    },
+    "buffer": {
+      "type": "http",
+      "url": "https://mcp.buffer.com/mcp",
+      "headers": { "Authorization": "Bearer ${BUFFER_API_KEY:-}" }
+    },
+    "apify": {
+      "type": "http",
+      "url": "https://mcp.apify.com",
+      "headers": { "Authorization": "Bearer ${APIFY_TOKEN:-}" }
+    }
+  }
+}

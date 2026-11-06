@@ -1,0 +1,6 @@
+google-meridian
+meridian-geox
+pandas
+numpy
+matplotlib
+pyarrow

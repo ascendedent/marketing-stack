@@ -1,0 +1,39 @@
+{
+  "env": {
+    "VERCEL_PLUGIN_TELEMETRY": "off",
+    "DO_NOT_TRACK": "1",
+    "IMPECCABLE_LIVE_COPY_AGENT": "chat"
+  },
+  "enabledPlugins": {
+    "claude-seo@agricidaniel-claude-seo": true,
+    "impeccable@impeccable": true,
+    "claude-ads@ai-marketing-hub-claude-ads": true,
+    "descript@descript": true
+  },
+  "extraKnownMarketplaces": {
+    "agricidaniel-claude-seo": {
+      "source": {
+        "source": "github",
+        "repo": "AgriciDaniel/claude-seo"
+      }
+    },
+    "impeccable": {
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable"
+      }
+    },
+    "ai-marketing-hub-claude-ads": {
+      "source": {
+        "source": "github",
+        "repo": "AgriciDaniel/claude-ads"
+      }
+    },
+    "descript": {
+      "source": {
+        "source": "github",
+        "repo": "descriptinc/descript-mcp"
+      }
+    }
+  }
+}

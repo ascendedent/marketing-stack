@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Wrapper: runs reel.py with the skill's own venv (created by preflight.sh).
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PY="$DIR/../.venv/bin/python"
+[ -x "$PY" ] || PY=python3
+exec "$PY" "$DIR/reel.py" "$@"

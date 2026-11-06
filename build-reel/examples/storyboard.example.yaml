@@ -1,0 +1,91 @@
+# A complete reel: hook, before/after, feature walkthrough, zoomed detail, diff, outro.
+# Put this next to vo.wav and a .env.reel holding DEMO_EMAIL / DEMO_PASSWORD.
+title: Instant search
+voiceover: vo.wav
+repo: ~/code/my-app
+viewport: desktop
+extend: 0.4
+
+style:
+  accent: "#FFB020"
+  captions: { style: tiktok }   # or bold | bounce | clean | pill
+
+targets:
+  before:
+    branch: main
+    port: 3001
+    install: "npm ci"
+    start: "npm run dev -- --port {port}"
+    label: Before
+  after:
+    branch: feature/instant-search
+    port: 3002
+    install: "npm ci"
+    start: "npm run dev -- --port {port}"
+    label: After
+
+app:
+  login:
+    url: /login
+    steps:
+      - fill: { selector: "#email", value: "${DEMO_EMAIL}" }
+      - fill: { selector: "#password", value: "${DEMO_PASSWORD}" }
+      - click: "button[type=submit]"
+    done: { url: "**/dashboard" }
+  hide: ["nextjs-portal", ".cookie-banner"]
+
+beats:
+  - id: hook
+    type: title
+    kicker: Build log
+    text: Search went from 4 steps to 0
+    say: I rebuilt search in our campaign dashboard.
+
+  - id: before-after
+    type: compare
+    layout: sequence
+    split: 0.6
+    start: /dashboard
+    say: Before, finding a campaign meant opening filters, typing, hitting apply, and waiting.
+    actions:
+      before:
+        - click: "#filters"
+        - type: { selector: "#q", text: "running shoes" }
+        - click: "#apply"
+        - wait: 1200
+      after:
+        - type: { selector: "[data-testid=search]", text: "running shoes" }
+        - wait: 800
+
+  - id: instant
+    type: app
+    target: after
+    start: /dashboard
+    heading: Now it filters as you type
+    say: Now you just start typing. Results filter instantly, with matches highlighted.
+    actions:
+      - type: { selector: "[data-testid=search]", text: "fire", delay: 110 }
+      - focus: { selector: "#rows tr:first-child", scale: 1.8, hold: 1800 }
+
+  - id: chips
+    type: app
+    target: after
+    camera: follow
+    zoom: 1.7
+    start: /dashboard
+    say: And one tap narrows it to live campaigns.
+    actions:
+      - click: "button[data-s=live]"
+      - wait: 900
+
+  - id: code
+    type: code
+    heading: The diff
+    diff: { file: src/app.js, from: before, to: after, context: 1, max_lines: 30 }
+    say: The whole change was about thirty lines. No more apply button, no spinner.
+
+  - id: outro
+    type: title
+    text: More every week
+    subtitle: Follow the build
+    say: Follow along for more updates every week.

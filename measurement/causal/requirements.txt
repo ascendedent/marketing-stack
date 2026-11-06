@@ -1,0 +1,5 @@
+causalpy
+pandas
+numpy<2.4
+matplotlib
+pyarrow

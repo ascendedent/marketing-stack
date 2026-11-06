@@ -1,0 +1,10 @@
+.env
+*.key
+.venv/
+__pycache__/
+data/
+reference/
+accounts/*
+!accounts/_template/
+!accounts/_template/**
+.pytest_cache/

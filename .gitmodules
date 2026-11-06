@@ -1,0 +1,68 @@
+[submodule "vendor/marketingskills"]
+	path = vendor/marketingskills
+	url = https://github.com/coreyhaines31/marketingskills.git
+	shallow = true
+[submodule "vendor/copywriting-skills"]
+	path = vendor/copywriting-skills
+	url = https://github.com/robpalmer99/claude-code-copywriting-skills.git
+	shallow = true
+[submodule "vendor/claude-ads"]
+	path = vendor/claude-ads
+	url = https://github.com/AgriciDaniel/claude-ads.git
+	shallow = true
+[submodule "vendor/claude-seo"]
+	path = vendor/claude-seo
+	url = https://github.com/AgriciDaniel/claude-seo.git
+	shallow = true
+[submodule "vendor/impeccable"]
+	path = vendor/impeccable
+	url = https://github.com/pbakaus/impeccable.git
+	shallow = true
+[submodule "vendor/vercel-agent-skills"]
+	path = vendor/vercel-agent-skills
+	url = https://github.com/vercel-labs/agent-skills.git
+	shallow = true
+[submodule "vendor/vercel-flags"]
+	path = vendor/vercel-flags
+	url = https://github.com/vercel/flags.git
+	shallow = true
+[submodule "vendor/web-quality-skills"]
+	path = vendor/web-quality-skills
+	url = https://github.com/addyosmani/web-quality-skills.git
+	shallow = true
+[submodule "vendor/creative-strategy-skills"]
+	path = vendor/creative-strategy-skills
+	url = https://github.com/motion-team/creative-strategy-skills.git
+	shallow = true
+[submodule "vendor/gsap-skills"]
+	path = vendor/gsap-skills
+	url = https://github.com/greensock/gsap-skills.git
+	shallow = true
+[submodule "vendor/meridian"]
+	path = vendor/meridian
+	url = https://github.com/google/meridian.git
+	shallow = true
+[submodule "vendor/causalpy"]
+	path = vendor/causalpy
+	url = https://github.com/pymc-labs/CausalPy.git
+	shallow = true
+[submodule "vendor/narenaryan-agent-skills"]
+	path = vendor/narenaryan-agent-skills
+	url = https://github.com/narenaryan/agent-skills.git
+	shallow = true
+[submodule "vendor/anthropic-skills"]
+	path = vendor/anthropic-skills
+	url = https://github.com/anthropics/skills.git
+	shallow = true
+[submodule "vendor/ponytail"]
+	path = vendor/ponytail
+	url = https://github.com/DietrichGebert/ponytail.git
+	shallow = true
+[submodule "vendor/descript"]
+	path = vendor/descript
+	url = https://github.com/descriptinc/descript-mcp.git
+	shallow = true
+[submodule "vendor/lotgen-skills"]
+	path = vendor/lotgen-skills
+	url = https://github.com/ascendedent/lotgen-skills.git
+	shallow = true

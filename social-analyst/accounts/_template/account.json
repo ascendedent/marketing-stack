@@ -1,0 +1,21 @@
+{
+  "slug": "",
+  "name": "",
+  "status": "onboarding",
+  "purpose": "",
+  "timezone": "UTC",
+  "primary_kpi": "engagementRate",
+  "platforms": [
+    { "service": "", "handle": "", "url": "", "owned": true }
+  ],
+  "competitors": [
+    { "service": "", "handle": "", "url": "", "why": "" }
+  ],
+  "channels": [],
+  "approval": {
+    "default_write": "idea",
+    "allow_queue": false,
+    "allow_publish_now": false
+  },
+  "created_at": ""
+}

@@ -74,7 +74,7 @@ Skills are grouped by function in [`skills/`](skills/). `.claude/skills/` is a f
 | Function | Skills |
 |---|---|
 | [Strategy](skills/strategy/) | `marketing-plan` `marketing-ideas` `marketing-psychology` `product-marketing` `offers` `pricing` `launch` |
-| [Research](skills/research/) | `customer-research` `competitor-profiling` `review-audit` |
+| [Research](skills/research/) | `customer-research` `competitor-profiling` `review-audit` `catalog-search` `open-library` `internet-archive` `google-books` `openalex` `crossref` `unpaywall` `arxiv` `pubmed-central` `doaj` |
 | [Paid media](skills/paid-media/) | `ads` `ad-creative` plus the `claude-ads` plugin |
 | [Copy](skills/copy/) | `copywriting` `copy-editing` `direct-response-copy` `ad-copy` `landing-page-copy` `copychief` `compliance-checker` |
 | [Conversion](skills/conversion/) | `cro` `ab-testing` `popups` `lead-magnets` |

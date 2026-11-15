@@ -50,11 +50,11 @@ beats:
     actions:
       before:
         - click: "#filters"
-        - type: { selector: "#q", text: "running shoes" }
+        - type: { selector: "#q", text: "fire blanket" }
         - click: "#apply"
         - wait: 1200
       after:
-        - type: { selector: "[data-testid=search]", text: "running shoes" }
+        - type: { selector: "[data-testid=search]", text: "fire blanket" }
         - wait: 800
 
   - id: instant

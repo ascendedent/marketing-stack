@@ -92,6 +92,8 @@ def speech_bounds(sil, dur):
         first = sil[0][1]
     if sil and sil[-1][1] >= dur - 0.05:
         last = sil[-1][0]
+    if first >= last:  # no speech at all (a silent placeholder track): captions span the whole timeline
+        return 0.0, dur
     return first, last
 
 

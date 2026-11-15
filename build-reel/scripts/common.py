@@ -240,8 +240,8 @@ def validate(sb):
                 errs.append(f"{where}: no targets defined")
         if b.get("frame") is not None and b.get("frame") not in FRAMES:
             errs.append(f"{where}: frame must be one of {sorted(FRAMES)}")
-        if t == "title" and not b.get("text"):
-            errs.append(f"{where}: title beats need 'text'")
+        if t == "title" and not (b.get("text") or b.get("image")):
+            errs.append(f"{where}: title beats need 'text' or 'image'")
         if t == "code" and not (b.get("diff") or b.get("snippet")):
             errs.append(f"{where}: code beats need 'diff' or 'snippet'")
         if t == "clip":

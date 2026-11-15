@@ -8,6 +8,7 @@ zoom is a recompose, not a re-record.
 import base64
 import json
 import math
+import os
 import shutil
 import time
 from pathlib import Path
@@ -22,6 +23,10 @@ html { scrollbar-width: none !important; }
 
 
 def _launch(p, headed=False):
+    # REEL_CDP=http://127.0.0.1:9333 attaches to a Chrome the user started by hand, for
+    # sites that refuse an automation-launched browser at sign-in.
+    if os.environ.get("REEL_CDP"):
+        return p.chromium.connect_over_cdp(os.environ["REEL_CDP"])
     # Prefer the Playwright-bundled Chromium, fall back to an installed Chrome.
     try:
         return p.chromium.launch(headless=not headed)
@@ -30,6 +35,22 @@ def _launch(p, headed=False):
             return p.chromium.launch(headless=not headed, channel="chrome")
         except Exception as e:
             die(f"could not launch a browser ({e}). Run: .venv/bin/playwright install chromium")
+
+
+class _SharedContext:
+    def __init__(self, ctx, vp):
+        self._ctx, self._vp = ctx, vp
+
+    def new_page(self):
+        page = self._ctx.new_page()
+        page.set_viewport_size({"width": self._vp["width"], "height": self._vp["height"]})
+        return page
+
+    def close(self):
+        pass
+
+    def __getattr__(self, name):
+        return getattr(self._ctx, name)
 
 
 def _context(browser, sb, vp, target, use_auth=True):
@@ -44,7 +65,12 @@ def _context(browser, sb, vp, target, use_auth=True):
     auth = sb.auth_path(target)
     if use_auth and auth.exists():
         kw["storage_state"] = str(auth)
-    ctx = browser.new_context(**kw)
+    if os.environ.get("REEL_CDP"):
+        # The hand-started Chrome's own signed-in context: some sites keep the session where
+        # storage_state cannot carry it. Never closed here; pages get the beat's viewport.
+        ctx = _SharedContext(browser.contexts[0], vp)
+    else:
+        ctx = browser.new_context(**kw)
     hide = list(sb.app.get("hide", []))
     css = HIDE_CSS + "".join(f"{s}{{display:none !important}}\n" for s in hide)
     ctx.add_init_script(
@@ -336,7 +362,7 @@ class Runner:
     def a_wait(self, ms):
         self._wait(float(ms) / self.speed)
 
-    def a_waitFor(self, arg, timeout=15000):
+    def a_waitFor(self, arg, timeout=None):  # None = the context default, which is app.timeout_ms
         if isinstance(arg, dict):
             if "url" in arg:
                 self.page.wait_for_url(arg["url"], timeout=timeout)
@@ -377,6 +403,8 @@ class Runner:
 
     def a_focus(self, target, scale=1.7, hold=1600, ease=380):
         """Zoom the camera onto an element (applied at compose time)."""
+        if isinstance(target, dict):  # documented form: focus: { selector, scale, hold }
+            scale, hold, ease = target.get("scale", scale), target.get("hold", hold), target.get("ease", ease)
         loc = self._loc(target)
         box = self._box(loc)
         if self.take:
@@ -505,6 +533,12 @@ def record(sb, beat_ids=None, headed=False, only_missing=False):
                     setup.a_goto(start)
                 for a in per_target(beat.get("setup"), tname) or []:
                     setup.run(expand_env(a))
+                guard = sb.app.get("guard")  # {js, message}: must be true before a take starts and after it ends
+                def guarded():
+                    return not guard or page.evaluate(f"() => Boolean({guard['js']})")
+                if not guarded():
+                    browser.close()
+                    die(f"beat '{beat['id']}' on {tname}: guard failed before recording ({guard.get('message', guard['js'])}); nothing recorded")
                 take = Take(sb.take_dir(beat["id"], tname), cdp, vp)
                 take.start()
                 runner = Runner(page, take, vp, t["url"], recording=True)
@@ -513,6 +547,8 @@ def record(sb, beat_ids=None, headed=False, only_missing=False):
                 try:
                     for a in per_target(beat.get("actions"), tname) or []:
                         runner.run(expand_env(a))
+                    if not guarded():
+                        raise RuntimeError(f"guard failed after the actions: {guard.get('message', guard['js'])}")
                 except SystemExit:
                     raise
                 except Exception as e:

@@ -108,3 +108,36 @@ Dates are when verified. Append new ones; mark stale ones instead of deleting.
   `.grok/config.toml` and also `.mcp.json` until you run/dismiss `/import-claude`.
   `scripts/sync_mcp.py` generates the TOML from `.mcp.json`.
 - python `mcp` SDK 2.x renamed FastMCP → `mcp.server.mcpserver.MCPServer`.
+
+## Buffer publishing: drafts, media links, reels (verified live 2026-11-13 to 2026-11-15)
+- **Buffer does not copy media in.** A post keeps the URL it was created with; Buffer's screens load it
+  in the browser and its workers fetch it at send time. There is no upload mutation in the API. Host the
+  file somewhere link-readable and leave it there until the post is sent.
+- **The link has to display in a browser, not just download.** A Google Drive download link
+  (`drive.usercontent.google.com/download?id=…`) is served as an attachment with
+  `cross-origin-resource-policy: same-site`: fine for a video (Buffer makes its own thumbnail), but
+  every picture preview in Buffer comes up blank. For a picture use
+  `https://lh3.googleusercontent.com/d/<file id>=s0` (file shared by link). `thumbnailUrl` on an image
+  asset is ignored, so the main `url` must be the displayable one.
+- **Drafts:** `createPost(input:{channelId, text, assets, saveToDraft:true, needsApproval:false,
+  mode:customScheduled, schedulingType:automatic, dueAt, tagIds, metadata})` gives status `draft` on
+  that date; nothing sends until a person schedules it. Read the post back and assert `status == draft`
+  before reporting success. Facebook needs `metadata.facebook.type` (post, reel or story);
+  `firstComment` rides in the same object.
+- **Editing:** `editPost` rejects a Facebook post without `metadata.facebook.type`, and returns
+  "Post must have either text or media" unless the current `text` is resent (posts with no caption need
+  `assets` resent instead). Leave out `saveToDraft` and `mode` and a scheduled post stays scheduled at
+  its time. Check status, dueAt and text before and after each edit.
+- **Sent posts are final through the API:** `deletePost` on a sent post returns
+  "Account is not allowed to perform this action on post". Fix those on the network itself.
+- **Meta reels are capped at 90 seconds through the API.** A longer video goes up as `type: post`;
+  make a separate cut of 90 s or less for `type: reel`. A reel cannot carry a first comment, so do not
+  put "sources in the comments" in a reel's voiceover or caption.
+- **Tags:** `tagsV2(input:{organizationId})` lists them; match by name, case-insensitive, and pass
+  `tagIds`. A missing tag should mean "no tag", not a failed post.
+- **Make the uploader idempotent.** Write the post id to a file beside the media and refuse to run
+  when it exists; a retry otherwise makes a second draft.
+- **Agents run with a temporary home folder.** A tool that relies on a config in `~` (rclone, gcloud)
+  fails inside an agent run even though it works in your shell. Pass the config path explicitly.
+- **Reading a small page's numbers:** rank nothing under three days old, compare like with like (reels
+  with reels), and treat fewer than four comparable posts as "not enough data", which is a valid report.

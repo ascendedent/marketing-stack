@@ -94,6 +94,13 @@ app:
 
 With `frame: full`, headings are a pill over the footage, captions sit at y≈1380, compare `stack` splits the frame top/bottom and `side` left/right, and title and code beats keep the background.
 
+### Guard
+
+`app.guard: { js: "<expression>", message: "..." }` is checked on every take, after `start` and `setup` and
+before recording begins, and again after the last action. If it is false, nothing is recorded (before) or the
+take fails with `failed.png` (after). Use it for anything that must be true on screen, such as the account or
+workspace being recorded.
+
 ## Beats
 
 Every beat has `id`, `type`, and `say` (the exact VO words it covers). Optional on any beat: `at` (start second, overrides alignment), `heading` (text above the footage), `caption` (caption text if different from `say`), `captions: false`.
@@ -105,6 +112,7 @@ Every beat has `id`, `type`, and `say` (the exact VO words it covers). Optional 
   kicker: Build log              # small pill above
   text: Search went from 4 steps to 0
   subtitle: optional smaller line
+  image: card.png                # optional: a finished full-frame image shown instead of the drawn card
   say: I rebuilt search in our campaign dashboard.
 ```
 

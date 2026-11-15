@@ -84,7 +84,7 @@ Skills are grouped by function in [`skills/`](skills/). `.claude/skills/` is a f
 | [Measurement](skills/measurement/) | `meridian-*` `*causalpy*` `causal-detective` `running-placebo-analysis` `marketing-geo-experiments` and the [`measurement`](measurement/) environments |
 | [Web build](skills/web-build/) | `core-web-vitals` `vercel-react-best-practices` `web-design-guidelines` `frontend-design` `flags-sdk` `vercel-flags` `gsap-*` plus the `impeccable` plugin |
 | Social | [`social-analyst`](social-analyst/) |
-| [Video](skills/video/) | [`build-reel`](build-reel/), the `descript` plugin, and `lotgen-*` |
+| [Video](skills/video/) | [`build-reel`](build-reel/), `reel-team`, `craft`, the `descript` plugin, and `lotgen-*` |
 
 The `lotgen-*` skills drive [LOTGEN](https://lotgen.ai), a hosted video service, and need a LOTGEN account. The app isn't part of this repo.
 

@@ -497,9 +497,14 @@ class TitleBeat:
 
     def __init__(self, kit, sb, beat, window):
         self.kit, self.beat, self.window = kit, beat, window
+        # image: a finished full-frame card (your own design) shown in place of the drawn one
+        self.card = (Image.open(sb.resolve(beat["image"])).convert("RGB").resize((kit.W, kit.H), Image.LANCZOS)
+                     if beat.get("image") else None)
 
     def render(self, t):
         kit = self.kit
+        if self.card:
+            return self.card.copy()
         img = kit.bg.copy()
         f = ease_out(t / 0.5)
         layer = Image.new("RGBA", (kit.W, kit.H), (0, 0, 0, 0))
@@ -833,6 +838,7 @@ class ClipBeat:
             w, h = int(fr.width * s), int(fr.height * s)
             big = fr.resize((w, h), Image.BICUBIC)
             img.paste(big, ((kit.W - w) // 2, (kit.H - h) // 2))
+            banner(kit, img, self.beat.get("heading"), FULL_TOP)
             return img
         heading(kit, img, self.beat, 330)
         x, y, w, h = self.slot

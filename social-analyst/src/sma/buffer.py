@@ -158,6 +158,11 @@ class Buffer:
             raise BufferError("refusing shareNow without explicit confirmation (--now --yes)")
         if mode == "customScheduled" and not due_at:
             raise BufferError("customScheduled needs due_at (ISO-8601 UTC)")
+        for u in images or []:
+            # Buffer keeps and displays the link itself; a Drive download link will not show in a browser.
+            if "drive.usercontent.google.com" in u or "drive.google.com/uc" in u:
+                raise BufferError("a Google Drive download link shows as a blank picture in Buffer: "
+                                  "use https://lh3.googleusercontent.com/d/<file id>=s0 (see docs/learnings.md)")
         assets = [{"image": {"url": u}} for u in images or []] + [{"video": {"url": u}} for u in videos or []]
         inp: dict[str, Any] = {"text": text, "channelId": channel_id, "schedulingType": "automatic", "mode": mode,
                                "saveToDraft": save_to_draft and mode != "shareNow", "needsApproval": needs_approval}

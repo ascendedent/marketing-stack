@@ -122,7 +122,8 @@ def create_idea(slug: str, channel: str, text: str, title: str | None = None, da
 def create_draft_post(slug: str, channel: str, text: str, scheduled_at: str | None = None,
                       image_urls: list[str] | None = None, video_urls: list[str] | None = None,
                       dry_run: bool = False) -> dict:
-    """Create a Buffer DRAFT post (optionally with an intended time). Media URLs must be public HTTPS.
+    """Create a Buffer DRAFT post (optionally with an intended time). Media URLs must be public HTTPS
+    and must display in a browser: Buffer keeps the link, it does not copy the file (docs/learnings.md).
     Queueing for real / publishing is left to a human in Buffer or the CLI."""
     from .buffer import Buffer, check_length
     from .cli import _resolve_channel

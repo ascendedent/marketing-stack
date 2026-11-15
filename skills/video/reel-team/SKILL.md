@@ -7,7 +7,8 @@ description: Run a recurring short-video pipeline with a team of agents instead 
 
 These are the rules that survived two real pipelines: a weekly news series voiced by its owner, and
 a product series recorded from a live web app with [`build-reel`](../build-reel/SKILL.md). Each one
-was learned by getting it wrong first. They apply to any orchestrator that hands tasks to agents.
+was learned by getting it wrong first. A third series, silent how-to lessons for a web app, added the
+notes on recording other companies' consoles. They apply to any orchestrator that hands tasks to agents.
 
 ## The shape
 
@@ -81,6 +82,20 @@ was learned by getting it wrong first. They apply to any orchestrator that hands
   writing, the agent reports that instead of recording something else.
 - An old branch runs against today's database. If the "before" errors or shows nothing, make an
   after-only video and say so.
+- Check that nothing in frame is a secret. Key prefixes, balances and account names get hidden with
+  `app.hide` before the first take, not blurred afterwards.
+- For a **third-party console** (showing where to get an API key, say), the owner signs in by hand
+  in the recorder's own window, the session is deleted when the video is done, and the walkthrough
+  **stops before the final Create button**. Never lift a session from the owner's everyday browser
+  profile. Sites that refuse an automated browser at sign-in are recorded through a hand-started
+  Chrome on a scratch profile (`REEL_CDP`).
+- Film what the screen says today. When it differs from your written guide, the guide is stale: fix
+  the guide, not the video.
+- **No voice yet is fine.** A silent track of the right length is the clock, beats are placed by
+  hand, and the captions carry the lesson; swap in the voiceover later and let alignment take over.
+- For app pages, a tall viewport with punch-in focus on the one element the line is about reads on a
+  phone. A desktop viewport that follows the cursor cuts cards in half. After a tab click, wait for
+  something in the tab's content, or the take opens on a half-loaded page.
 
 ## Making it watchable
 

@@ -116,11 +116,11 @@ AGENTS.md  CLAUDE.md  README.md  .env.example  .mcp.json
 src/sma/            # toolkit: buffer store analyze discover video setup cli mcp_server
 src/sma/connectors/ # youtube (OAuth + Reporting API) instagram threads (Graph tokens) x linkedin (OAuth, oauth.py)
                     # tiktok_import (Studio export)
-scripts/            # session_start.sh, agent.sh, sync_mcp.py, fetch_reference.sh
+scripts/            # session_start.sh, agent.sh, sync_mcp.py, fetch_reference.sh, meta_publish.py (post straight to Meta)
 tests/              # offline tests
 accounts/_template/ # account.json, profile.md, learnings.md, discovery/ videos/ reports/
 knowledge/          # frameworks + benchmarks (vendored, attributed)
-docs/               # buffer-setup.md, connect-{youtube,instagram,threads,tiktok,x,linkedin}.md, learnings.md, sources.md
+docs/               # buffer-setup.md, connect-{youtube,instagram,threads,tiktok,x,linkedin}.md, post-direct-to-meta.md, learnings.md, sources.md
 web/                # web edition for claude.ai / ChatGPT / grok.com: shared/ sources → build.py → dist/ (committed)
 reference/          # gitignored third-party clones (read-only)
 data/               # gitignored: sqlite store, downloaded media, OAuth tokens (data/tokens, 0600)

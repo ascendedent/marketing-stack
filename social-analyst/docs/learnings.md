@@ -141,3 +141,64 @@ Dates are when verified. Append new ones; mark stale ones instead of deleting.
   fails inside an agent run even though it works in your shell. Pass the config path explicitly.
 - **Reading a small page's numbers:** rank nothing under three days old, compare like with like (reels
   with reels), and treat fewer than four comparable posts as "not enough data", which is a valid report.
+
+## Posting straight to Meta (verified live 2026-11-16, Graph API v27.0)
+Setup steps are in `post-direct-to-meta.md`; the tool is `scripts/meta_publish.py`.
+- **Facebook can only be gated by scheduling.** There is no draft box in the API. A scheduled post
+  (`published=false` + `scheduled_publish_time`, 20 minutes to about a month out) waits in Business
+  Suite's planner and can be read back (`published` / `is_published` false) and deleted by id.
+- **A picture scheduled on `/photos` alone is invisible in Business Suite.** It publishes, and
+  `/{page}/scheduled_posts` lists it, but the Scheduled tab does not show it. Upload the picture with
+  `published=false&temporary=true`, then make the post on `/{page}/feed` with
+  `attached_media[0]={"media_fbid":…}`, `published=false`, `scheduled_publish_time` and
+  `unpublished_content_type=SCHEDULED`.
+- **Large videos go up in pieces.** One multipart request with a 300 MB file to
+  `graph-video.facebook.com/{page}/videos` came back as a non-JSON error. Use `upload_phase=start`
+  (with `file_size`), `transfer` (send `video_file_chunk` from `start_offset` to `end_offset`, repeat
+  until they are equal), then `finish` with the description and the schedule fields.
+- **Reels:** `/{page}/video_reels` `upload_phase=start` → POST the bytes to the returned `upload_url`
+  with headers `Authorization: OAuth <page token>`, `offset: 0`, `file_size` → `upload_phase=finish`
+  with `video_state=SCHEDULED`. 90 seconds at most.
+- **A comment can be attached while the video is still scheduled:** `POST /{video-id}/comments` with
+  the page token. This also works where a scheduler tool says a reel cannot carry a first comment.
+- **A killed upload can still have created the post.** A reel test that timed out client-side was
+  found scheduled afterwards. After any failed or interrupted run, list `/{page}/scheduled_posts` and
+  delete strays by id. When cleaning up, delete only ids you created; never loop over everything listed.
+- **Instagram refused a direct upload** (`upload_type=resumable` → `ProcessingFailedError` on
+  `rupload.facebook.com/ig-api-upload`, with either token). `video_url` pointing at a public link works:
+  create the container, poll `status_code` until `FINISHED` (a few minutes), then `media_publish`.
+  Containers expire after 24 hours, so prepare close to the posting time.
+- **Threads** takes a public `video_url` too, 5 minutes and 500 characters at most. A reply to your own
+  post (`reply_to_id`) stands in for a first comment.
+- **Text comes back trimmed.** Meta drops trailing whitespace from a caption, so compare stripped text
+  when verifying a moved post, and do the "create, verify, then delete the old copy" steps so that a
+  failed comparison cannot leave both copies scheduled.
+- **Post numbers that still exist:** `post_media_view` (views), `post_total_media_view_unique` (reach),
+  `post_clicks`, `post_video_views`, `post_video_avg_time_watched` and `post_video_view_time` (both
+  milliseconds). `post_impressions`, `post_impressions_unique` and `post_engaged_users` are gone. Ask
+  for one metric per call: one that does not apply to the post fails the whole request. Reactions,
+  comments and shares come from the post's own fields (`reactions.summary(total_count).limit(0)` etc.).
+- **Every call hung for 20 seconds on one machine:** a dead IPv6 route to `graph.facebook.com`. Force
+  IPv4 (`httpx.HTTPTransport(local_address="0.0.0.0")`, or `urllib3.util.connection.HAS_IPV6 = False`
+  for requests) before blaming the API.
+- **Moving scheduled posts off a scheduler:** for each one, create the Meta post with the scheduler's
+  current text and time, read it back as unpublished, and only then delete it from the scheduler. Leave
+  anything due within the hour where it is.
+
+## YouTube: direct API versus Buffer (2026-11-16)
+- **Direct upload works but is locked to private.** A Google Cloud project made after mid-2020 has every
+  API upload forced to private until Google's "YouTube API Services audit" form is approved, which is
+  separate from OAuth app verification and can take weeks. Service accounts and API keys cannot upload;
+  it needs an OAuth client (Desktop app) and a one-time browser sign-in.
+- **The sign-in picks one channel.** Read back `channels?mine=true` and check the title before building
+  on it; the first attempt here landed on a different channel of the same person.
+- **An External app left in "Testing" expires its login every 7 days**, and only listed test users can
+  sign in. Publishing to production needs a home page, privacy policy and an authorized domain filled
+  in, but not Google's verification, for an app only its owner uses.
+- **Through Buffer it is a few fields.** `metadata.youtube` takes `title` (100 characters), `categoryId`,
+  `privacy` (`public`, `unlisted`, `private`), `madeForKids`, `notifySubscribers`, `embeddable`,
+  `license`, `isAiGenerated`. The post `text` is the description (5000 characters, no `<` or `>`).
+  YouTube has no first comment in Buffer: put sources at the end of the description.
+- **A vertical video of 3 minutes or less is a Short**, whatever it is called. For a channel that wants
+  Shorts, send the full video when it is 3 minutes or less and the shorter cut only when it is longer.
+

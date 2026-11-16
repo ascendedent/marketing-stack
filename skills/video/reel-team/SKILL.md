@@ -117,8 +117,19 @@ notes on recording other companies' consoles. They apply to any orchestrator tha
   a reel cut made from the same render (the opening, the top one or two stories with the strongest
   ad lib, the closing). Drop the line that lists every story, and any "sources in the comments" line,
   from the reel cut. Keep the strongest ad lib even when it costs a later story.
-- The scheduler facts (draft creation, media links, edits) are in
-  [`social-analyst/docs/learnings.md`](../../../social-analyst/docs/learnings.md).
+- **Each network gets the strongest gate it allows**, and the tool enforces it: a scheduler's draft
+  where there is one, a scheduled post in the network's own planner where the API can schedule
+  (Facebook), and a typed confirmation from the owner where a post is public the instant it is made
+  (Instagram, Threads). The agent brief names the flags no agent may run.
+- **No polling watchers.** When the owner approves a post for a set time, queue one one-time job for
+  that minute; it posts and adds the sources comment straight after, and refuses if it starts hours late.
+- Pick the cut per network, as a rule the tool checks: for example the full video where it fits the
+  network's short-video limit, the shorter cut only where it does not.
+- When moving posts between tools, create the new one, read it back, then delete the old one, so
+  nothing can go out twice. After any interrupted upload, look for a stray post before retrying.
+- The scheduler and Meta API facts (drafts, media links, direct posting, YouTube) are in
+  [`social-analyst/docs/learnings.md`](../../../social-analyst/docs/learnings.md) and
+  [`post-direct-to-meta.md`](../../../social-analyst/docs/post-direct-to-meta.md).
 - A weekly **analyst** agent reads two weeks of post numbers and writes one short report the builders
   read before they start. It needs four comparable posts and three days of age before it calls
   anything a finding, it says "not enough data" when that is true, and it never overrides the

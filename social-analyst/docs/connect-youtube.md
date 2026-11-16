@@ -54,3 +54,31 @@ Account level (`sma account-metrics <slug>`): followers, daily views/watch minut
 first `sync` creates the reporting job; Google produces the first daily reports ~24–48 hours later
 (with roughly a month of backfill), and every later sync ingests the new ones. They appear per video as
 `impressions` and `thumbnailCtr` (%) — use `sma report <slug> --kpi thumbnailCtr` to compare packaging.
+
+## Publishing the app, when Google will not let you
+**Publish app** can refuse until the Branding page has a home page, a privacy policy link and an
+authorized domain. For an app only you use, Google does not review them; they only have to exist.
+Put a short, honest privacy page and terms page on a domain you own (what the tool reads, that nothing
+is sold or shared, how to revoke access, links to the YouTube Terms of Service and Google Privacy
+Policy), mark them `noindex`, enter the two links, add the domain under **Authorized domains**, then
+publish. Until then only listed test users can sign in ("Access blocked … has not completed the Google
+verification process" means the account is not a test user and the app is still in Testing).
+
+The app's owner and the channel's owner can be different Google accounts. An **Internal** app only
+admits accounts in your Workspace, so use **External** when the channel belongs to a personal account.
+
+After sign-in, check which channel you got (`channels?mine=true`): Google signs in to one channel at a
+time, and it is easy to land on another channel of the same person.
+
+## Uploading through the API (think twice)
+Uploading needs the extra scope `youtube.upload` (and `youtube.force-ssl` to comment) on the same OAuth
+client, requested at sign-in. Two limits decide whether it is worth it:
+- Every upload from a project created after mid-2020 is **forced to private** until Google approves the
+  "YouTube API Services – Audit and Quota Extension Form" (project number, what the tool does, the API
+  calls used, privacy and terms links, a screen recording). That can take weeks. Without it the tool can
+  only upload private videos for a person to publish in YouTube Studio.
+- The default daily quota allows only a handful of uploads.
+
+If drafts in a scheduler are enough, connect the YouTube channel in Buffer instead: it needs no Google
+Cloud project, and `learnings.md` lists the `metadata.youtube` fields a post takes.
+

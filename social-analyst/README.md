@@ -52,6 +52,40 @@ Check progress any time with `uv run sma setup status`. Manual route: `uv sync`,
 Once `.env` exists, prefer `scripts/agent.sh claude|codex|grok`: it exports `.env` so the Buffer/Apify
 MCP servers can authenticate, and regenerates the Codex/Grok MCP config.
 
+## API access: Meta and YouTube
+
+Two connections need accounts set up outside this repo. Do them once; the person pastes every token
+into `.env` themselves and never into a chat.
+
+**Meta (Facebook page, Instagram, Threads): posting and numbers.** Full steps:
+[`docs/post-direct-to-meta.md`](docs/post-direct-to-meta.md).
+1. At developers.facebook.com create a **Business** app in your business portfolio with the use case
+   "Manage everything on your Page" (add the Instagram and Threads use cases if you post there), give
+   it a privacy policy URL, and switch it to **Live**.
+2. In the business portfolio's settings add a **system user** (Admin) and assign it the page, the app
+   and the Instagram account with full control.
+3. On that system user choose **Generate token**: pick the app, set expiry to Never, tick the page
+   permissions and the `instagram_*` ones. Put it in `.env` as `META_SYSTEM_TOKEN`, with `META_PAGE_ID`
+   and `META_IG_USER_ID`.
+4. Threads needs its own token: add the profile as a **Threads Tester** in the app, accept the invite
+   in Threads (Settings → Account → Website permissions), then use the app's **User Token Generator**.
+   Put it in `.env` as `THREADS_TOKEN`.
+5. Post with `scripts/meta_publish.py --help`. Facebook is only ever scheduled; Instagram and
+   Threads ask a person to confirm at a terminal, because those go public at once.
+
+**YouTube: numbers, and uploads if you really need them.** Full steps:
+[`docs/connect-youtube.md`](docs/connect-youtube.md).
+1. In Google Cloud create a project and enable **YouTube Data API v3** and **YouTube Analytics API**.
+2. Set the OAuth consent screen to **External** and publish it to **In production**, or the sign-in
+   expires every 7 days. Publishing needs a home page, privacy policy link and authorized domain filled
+   in; it does not need Google's verification for your own channel.
+3. Create an **OAuth client ID** of type **Desktop app** (API keys and service accounts cannot act for
+   a channel) and store the client ID and secret with `uv run sma setup keys`.
+4. Run `uv run sma connect youtube <slug>`, sign in as the channel's owner, and check it connected the
+   channel you meant.
+5. For posting, prefer connecting the channel in Buffer: uploads through Google's API stay private
+   until Google approves an audit form, which can take weeks.
+
 ## How it works with each agent
 
 | | instructions | skills | MCP servers |
